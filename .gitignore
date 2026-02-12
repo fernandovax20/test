@@ -3,5 +3,4 @@ __pycache__/
 *.pyo
 pgdata/
 .env
-PRUEBA_TECNICA.md
 
