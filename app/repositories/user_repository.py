@@ -29,21 +29,12 @@ class UserRepository:
         conn = get_connection()
         try:
             with conn.cursor() as cur:
-                is_numeric = query.isdigit()
-                if is_numeric:
-                    cur.execute(
-                        "SELECT id, name, email, created_at FROM users "
-                        "WHERE id = %s OR LOWER(name) LIKE %s OR LOWER(email) LIKE %s "
-                        "ORDER BY created_at DESC",
-                        (int(query), f"%{query.lower()}%", f"%{query.lower()}%"),
-                    )
-                else:
-                    cur.execute(
-                        "SELECT id, name, email, created_at FROM users "
-                        "WHERE LOWER(name) LIKE %s OR LOWER(email) LIKE %s "
-                        "ORDER BY created_at DESC",
-                        (f"%{query.lower()}%", f"%{query.lower()}%"),
-                    )
+                cur.execute(
+                    "SELECT id, name, email, created_at FROM users "
+                    "WHERE LOWER(name) LIKE %s OR LOWER(email) LIKE %s "
+                    "ORDER BY created_at DESC",
+                    (f"%{query.lower()}%", f"%{query.lower()}%"),
+                )
                 return [User.from_row(row) for row in cur.fetchall()]
         finally:
             conn.close()
